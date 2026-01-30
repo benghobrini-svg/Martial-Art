@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Martial Art </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        .animated-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Particle canvas */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            text-align: center;
+            background: transparent;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(15, 52, 96, 0.6) 0%, transparent 70%);
+            z-index: -1;
+            animation: breathe 6s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* Floating shapes in hero */
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 25s;
+        }
+
+        .shape:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            top: 50%;
+            right: 10%;
+            animation-delay: 3s;
+            animation-duration: 30s;
+        }
+
+        .shape:nth-child(3) {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(45deg, #6bcf7f, #4facfe);
+            bottom: 10%;
+            left: 50%;
+            animation-delay: 6s;
+            animation-duration: 20s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(50px, -50px) rotate(90deg);
+            }
+            50% {
+                transform: translate(0, -100px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-50px, -50px) rotate(270deg);
+            }
+        }
+
+        .hero-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d, #ff6b6b);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite, gradientMove 4s ease infinite;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(255, 107, 107, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: blur(20px);
+            opacity: 0.7;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.5)); }
+            to { filter: drop-shadow(0 0 40px rgba(255, 217, 61, 0.9)); }
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            color: #ffd93d;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 900px;
+            line-height: 1.9;
+            margin: 20px auto;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p:nth-of-type(2) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 0.9;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-divider {
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #ffd93d, transparent);
+            margin: 40px auto;
+            border-radius: 2px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards, expandWidth 2s ease-in-out infinite;
+            animation-delay: 0.8s;
+        }
+
+        @keyframes expandWidth {
+            0%, 100% { width: 100px; }
+            50% { width: 150px; }
+        }
+
+        .scroll-indicator {
+            margin-top: 60px;
+            animation: fadeInUp 1s ease forwards, bounce 2s infinite;
+            animation-delay: 1s;
+            opacity: 0;
+        }
+
+        .scroll-indicator p {
+            font-size: 3rem;
+            background: none;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            animation: none;
+            opacity: 1;
+            filter: drop-shadow(0 0 10px rgba(255, 217, 61, 0.5));
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        /* Cards Section */
+        .cards-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+            perspective: 1000px;
+        }
+
+        .cards-container {
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            padding: 40px;
+            scroll-snap-type: x mandatory;
+            max-width: 1400px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+            cursor: grab;
+        }
+
+        .cards-container:active {
+            cursor: grabbing;
+        }
+
+        .cards-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .navigation-dots {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 25px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #ffd93d;
+            transform: scale(1.3);
+        }
+
+        .dot:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .nav-arrows {
+            position: fixed;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .arrow {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: all;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .arrow:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .arrow svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        .card {
+            min-width: 350px;
+            height: 500px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 20px;
+            padding: 30px;
+            scroll-snap-align: center;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            cursor: pointer;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        /* Reflection effect */
+        .card-reflection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.03) 50%, transparent 100%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Glow effect */
+        .card-glow {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6b6b, #4facfe, #00f2fe, #ff6b6b);
+            background-size: 300% 300%;
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            filter: blur(15px);
+            transition: opacity 0.5s ease;
+            animation: glowRotate 3s linear infinite;
+        }
+
+        @keyframes glowRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card:hover {
+            transform: translateY(-30px) rotateY(0deg) rotateX(0deg) scale(1.1);
+            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.9), 
+                        0 0 60px rgba(74, 172, 254, 0.3);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        .card:hover .card-reflection {
+            opacity: 1;
+        }
+
+        .card:hover .card-glow {
+            opacity: 0.6;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .card:hover .card-image::before {
+            left: 100%;
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.15) translateZ(30px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-content {
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .card:hover .card-content {
+            transform: translateZ(40px);
+        }
+
+        .card h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #ffd93d;
+            text-shadow: 0 2px 10px rgba(255, 217, 61, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover h3 {
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 217, 61, 0.8);
+        }
+
+        .card h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #ffd93d;
+        }
+
+        .card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        /* Motivation Section */
+        .motivation {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 20px;
+            text-align: center;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .motivation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(15, 52, 96, 0.8) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        /* Energy burst effect */
+        .energy-burst {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .burst {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(107, 207, 127, 0.4), transparent);
+            animation: burstExpand 4s ease-out infinite;
+        }
+
+        .burst:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .burst:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            animation-delay: 1.5s;
+        }
+
+        .burst:nth-child(3) {
+            bottom: 20%;
+            left: 50%;
+            animation-delay: 3s;
+        }
+
+        @keyframes burstExpand {
+            0% {
+                transform: scale(0);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.4;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        .motivation-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+        }
+
+        .motivation h2 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #6bcf7f, #4facfe, #6bcf7f);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientMove 3s ease infinite;
+            position: relative;
+            z-index: 1;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .motivation h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #4facfe, transparent);
+            border-radius: 2px;
+            animation: expandWidth 2s ease-in-out infinite;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: #ffd93d;
+            margin-bottom: 50px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        .motivation-content {
+            max-width: 1000px;
+            font-size: 1.4rem;
+            line-height: 2;
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .motivation-content p {
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .motivation-content p:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(74, 172, 254, 0.2);
+        }
+
+        .motivation-content p:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .motivation-content p:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .motivation-content p:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        /* Stats section */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin: 50px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .stat-box:nth-child(1) { animation-delay: 0.8s; }
+        .stat-box:nth-child(2) { animation-delay: 1s; }
+        .stat-box:nth-child(3) { animation-delay: 1.2s; }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cta-button {
+            padding: 25px 60px;
+            font-size: 1.4rem;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            border: none;
+            border-radius: 50px;
+            color: #1a1a2e;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-8px) scale(1.08);
+            box-shadow: 0 25px 60px rgba(255, 107, 107, 0.7);
+        }
+
+        .cta-button:active {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        /* Testimonial quote */
+        .testimonial {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #4facfe;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            font-style: italic;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 1.4s;
+        }
+
+        .testimonial-author {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #ffd93d;
+            font-style: normal;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+                letter-spacing: 1px;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+                letter-spacing: 2px;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+                padding: 20px;
+            }
+
+            .shape {
+                width: 150px !important;
+                height: 150px !important;
+            }
+
+            .card {
+                min-width: 300px;
+                height: 450px;
+            }
+
+            .motivation h2 {
+                font-size: 2.5rem;
+            }
+
+            .tagline {
+                font-size: 1.1rem;
+                letter-spacing: 2px;
+            }
+
+            .motivation-content {
+                font-size: 1.2rem;
+            }
+
+            .motivation-content p {
+                padding: 20px;
+            }
+
+            .stats-container {
+                gap: 30px;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+
+            .stat-label {
+                font-size: 0.9rem;
+            }
+
+            .testimonial {
+                font-size: 1.1rem;
+                padding: 25px;
+            }
+
+            .cta-button {
+                padding: 20px 40px;
+                font-size: 1.1rem;
+            }
+
+            .burst {
+                width: 120px !important;
+                height: 120px !important;
+            }
+        }
+    </style>
+    <link rel="icon" type="image/png" href="mt.jpg">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-background"></div>
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        
+        <div class="hero-container">
+            <h1 data-text="The Way of the Warrior">The Way of the Warrior</h1>
+            <div class="subtitle">Ancient Wisdom • Modern Strength</div>
+            <div class="hero-divider"></div>
+            <p>
+                Martial arts are more than just physical combat techniques. They are ancient disciplines that unite the body, mind, and spirit. 
+                Through centuries of refinement, martial arts have evolved into powerful systems of self-defense, physical fitness, and mental discipline. 
+                Each style carries its own philosophy, teaching practitioners not only how to fight, but how to live with honor, respect, and inner peace.
+            </p>
+            <p>
+                Whether you seek strength, flexibility, confidence, or spiritual growth, there is a martial art waiting to transform your life.
+            </p>
+            <div class="scroll-indicator">
+                <p>↓</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cards Section -->
+    <section class="cards-section">
+        <div class="cards-container" id="cardsContainer">
+            <!-- Karate Card -->
+            <div class="card">
+                <div class="card-glow"></div>
+                <div class="card-reflection"></div>
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1555597673-b21d5c935865?w=400&h=300&fit=crop');"></div>
+                <div class="card-content">
+                    <h3>Karate</h3>
+                    <p>
+                        Originating from Okinawa, Japan, Karate emphasizes powerful strikes, kicks, and defensive blocks. 
+                        It teaches discipline, respect, and the development of character through rigorous training and kata practice.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Taekwondo Card -->
+            <div class="card">
+                <div class="card-glow"></div>
+                <div class="card-reflection"></div>
+                <div class="card-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1nUbZ4oDIxq8fMUagQ_GWEqr5j2uodF5sinEJaIjVbid2WO50NbAfKRU&s');"></div>
+                <div class="card-content">
+                    <h3>Taekwondo</h3>
+                    <p>
+                        Korean martial art known for its spectacular high kicks and jumping spinning techniques. 
+                        Taekwondo builds flexibility, speed, and mental fortitude while emphasizing the philosophy of courtesy and perseverance.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Judo Card -->
+            <div class="card">
+                <div class="card-glow"></div>
+                <div class="card-reflection"></div>
+                <div class="card-image" style="background-image: url('https://cdn.imago-images.com/bild/sp/1039989742/w.jpg');"></div>
+                    <h3>Judo</h3>
+                    <p>
+                        The gentle way - Judo focuses on throws, grappling, and using an opponent's force against them. 
+                        It develops balance, timing, and teaches practitioners to be flexible in both body and mind.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Muay Thai Card -->
+            <div class="card">
+                <div class="card-glow"></div>
+                <div class="card-reflection"></div>
+                <div class="card-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1pNTJV9pdhVBv-KB_LJFFGnpB0D3s4DEjEA&s');"></div>
+                <div class="card-content">
+                    <h3>Muay Thai</h3>
+                    <p>
+                        The art of eight limbs from Thailand, utilizing fists, elbows, knees, and shins. 
+                        Muay Thai is one of the most effective striking arts, building incredible conditioning and warrior spirit.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Brazilian Jiu-Jitsu Card -->
+            <div class="card">
+                <div class="card-glow"></div>
+                <div class="card-reflection"></div>
+                <div class="card-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpv2YeSQaf41_mthID8LQJ1uis0dr7-SVjYw&s');"></div>
+                <div class="card-content">
+                    <h3>Brazilian Jiu-Jitsu</h3>
+                    <p>
+                        Ground-fighting art that emphasizes technique over strength. BJJ teaches how to control and submit opponents through leverage and proper positioning, proving that size doesn't always matter.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Kung Fu Card -->
+            <div class="card">
+                <div class="card-glow"></div>
+                <div class="card-reflection"></div>
+                <div class="card-image" style="background-image: url('https://thetemple.fr/wp-content/uploads/2024/12/wing-chun-kung-fu-toulouse-the-temple-beddar-2024-1024x768.jpg');"></div>
+                <div class="card-content">
+                    <h3>Kung Fu</h3>
+                    <p>
+                        Ancient Chinese martial arts with numerous styles, each inspired by animal movements and natural principles. 
+                        Kung Fu cultivates grace, power, and harmony between the practitioner and their environment.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation Arrows -->
+        <div class="nav-arrows">
+            <div class="arrow arrow-left" onclick="scrollCards(-1)">
+                <svg viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+            </div>
+            <div class="arrow arrow-right" onclick="scrollCards(1)">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Navigation Dots -->
+        <div class="navigation-dots" id="navDots"></div>
+    </section>
+
+    <!-- Motivation Section -->
+    <section class="motivation">
+        <div class="energy-burst">
+            <div class="burst"></div>
+            <div class="burst"></div>
+            <div class="burst"></div>
+        </div>
+        
+        <div class="motivation-container">
+            <h2>Begin Your Journey Today</h2>
+            <div class="tagline">Transform Body • Strengthen Mind • Forge Spirit</div>
+            
+            <div class="motivation-content">
+                <p>
+                    <strong>Every master was once a beginner.</strong> The path of martial arts is not about perfection—it's about progress. 
+                    Each technique you learn, each challenge you overcome, builds not just your body, but your character.
+                </p>
+                <p>
+                    Martial arts will teach you discipline when you feel lazy, courage when you feel afraid, and humility when you feel proud. 
+                    You'll discover strengths you never knew you had and push beyond limits you thought were impossible.
+                </p>
+                <p>
+                    <strong>The question is not whether you can do it—but whether you will.</strong>
+                </p>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-number">1000+</div>
+                    <div class="stat-label">Years of Wisdom</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Mental Focus</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Possibilities</div>
+                </div>
+            </div>
+
+            <div class="testimonial">
+                "I do not fear the man who has practiced 10,000 kicks once. I fear the man who has practiced one kick 10,000 times."
+                <div class="testimonial-author">— Bruce Lee</div>
+            </div>
+
+            <button class="cta-button" onclick="alert('Start your martial arts journey at a local dojo near you!')">
+                Start Your Journey
+            </button>
+        </div>
+    </section>
+
+    <script>
+        // ===== PARTICLE SYSTEM =====
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const particles = [];
+        const particleCount = 100;
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            
+            draw() {
+                ctx.fillStyle = `rgba(74, 172, 254, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        function initParticles() {
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.strokeStyle = `rgba(74, 172, 254, ${0.2 - distance / 500})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+        
+        initParticles();
+        animateParticles();
+        
+        // ===== CARD SYSTEM =====
+        const cards = document.querySelectorAll('.card');
+        const container = document.getElementById('cardsContainer');
+        const navDotsContainer = document.getElementById('navDots');
+        let currentIndex = 0;
+        let autoScrollInterval;
+        
+        // Create navigation dots
+        cards.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => scrollToCard(index));
+            navDotsContainer.appendChild(dot);
+        });
+        
+        const dots = document.querySelectorAll('.dot');
+        
+        // Update active dot based on scroll position
+        function updateActiveDot() {
+            const scrollPosition = container.scrollLeft;
+            const cardWidth = cards[0].offsetWidth + 30; // card width + gap
+            const newIndex = Math.round(scrollPosition / cardWidth);
+            
+            if (newIndex !== currentIndex && newIndex < cards.length) {
+                currentIndex = newIndex;
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            }
+        }
+        
+        // Smooth scroll to specific card
+        function scrollToCard(index) {
+            const cardWidth = cards[0].offsetWidth + 30;
+            container.scrollTo({
+                left: cardWidth * index,
+                behavior: 'smooth'
+            });
+            currentIndex = index;
+        }
+        
+        // Arrow navigation
+        function scrollCards(direction) {
+            const newIndex = currentIndex + direction;
+            if (newIndex >= 0 && newIndex < cards.length) {
+                scrollToCard(newIndex);
+            }
+        }
+        
+        // Auto-scroll functionality
+        function startAutoScroll() {
+            autoScrollInterval = setInterval(() => {
+                const nextIndex = (currentIndex + 1) % cards.length;
+                scrollToCard(nextIndex);
+            }, 4000); // Change card every 4 seconds
+        }
+        
+        function stopAutoScroll() {
+            clearInterval(autoScrollInterval);
+        }
+        
+        // Start auto-scroll
+        startAutoScroll();
+        
+        // Stop auto-scroll on user interaction
+        container.addEventListener('mouseenter', stopAutoScroll);
+        container.addEventListener('mouseleave', startAutoScroll);
+        container.addEventListener('touchstart', stopAutoScroll);
+        
+        // Listen to scroll events
+        container.addEventListener('scroll', updateActiveDot);
+        
+        // Enhanced 3D effect with smoother transitions
+        cards.forEach(card => {
+            const cardImage = card.querySelector('.card-image');
+            const cardContent = card.querySelector('.card-content');
+            const cardGlow = card.querySelector('.card-glow');
+            
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                // Calculate rotation based on mouse position
+                const rotateX = (y - centerY) / 12;
+                const rotateY = (centerX - x) / 12;
+                
+                // Calculate position for the glow effect
+                const glowX = (x / rect.width) * 100;
+                const glowY = (y / rect.height) * 100;
+                
+                requestAnimationFrame(() => {
+                    card.style.transform = `translateY(-30px) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
+                    
+                    // Move the glow effect with mouse
+                    if (cardGlow) {
+                        cardGlow.style.background = `radial-gradient(circle at ${glowX}% ${glowY}%, #ff6b6b, #4facfe, #00f2fe, #ff6b6b)`;
+                    }
+                });
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                requestAnimationFrame(() => {
+                    card.style.transform = 'translateY(0) perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+                });
+            });
+            
+            // Add magnetic effect - cards slightly move towards cursor
+            card.addEventListener('mouseenter', (e) => {
+                const rect = card.getBoundingClientRect();
+                const cardCenterX = rect.left + rect.width / 2;
+                const cardCenterY = rect.top + rect.height / 2;
+                
+                const angleX = (e.clientY - cardCenterY) / 30;
+                const angleY = (e.clientX - cardCenterX) / 30;
+                
+                card.style.transform = `translate(${angleY}px, ${angleX}px) scale(1.02)`;
+            });
+        });
+
+        // Smooth drag scrolling
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        let velocity = 0;
+        let lastX = 0;
+        let lastTime = Date.now();
+
+        container.addEventListener('mousedown', (e) => {
+            isDown = true;
+            container.style.cursor = 'grabbing';
+            startX = e.pageX - container.offsetLeft;
+            scrollLeft = container.scrollLeft;
+            velocity = 0;
+            lastX = e.pageX;
+            lastTime = Date.now();
+            stopAutoScroll();
+        });
+
+        container.addEventListener('mouseleave', () => {
+            isDown = false;
+            container.style.cursor = 'grab';
+            applyMomentum();
+        });
+
+        container.addEventListener('mouseup', () => {
+            isDown = false;
+            container.style.cursor = 'grab';
+            applyMomentum();
+        });
+
+        container.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            
+            const x = e.pageX - container.offsetLeft;
+            const walk = (x - startX) * 2;
+            container.scrollLeft = scrollLeft - walk;
+            
+            // Calculate velocity
+            const now = Date.now();
+            const dt = now - lastTime;
+            const dx = e.pageX - lastX;
+            velocity = dx / dt;
+            lastX = e.pageX;
+            lastTime = now;
+        });
+
+        // Apply momentum scrolling
+        function applyMomentum() {
+            if (Math.abs(velocity) > 0.1) {
+                container.scrollLeft -= velocity * 30;
+                velocity *= 0.95; // Friction
+                requestAnimationFrame(applyMomentum);
+            }
+        }
+
+        // Parallax effect on scroll for hero section
+        let ticking = false;
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const hero = document.querySelector('.hero');
+                    
+                    if (hero) {
+                        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                        hero.style.opacity = Math.max(0, 1 - (scrolled / 600));
+                    }
+                    
+                    // Parallax for cards
+                    cards.forEach((card, index) => {
+                        const cardTop = card.getBoundingClientRect().top;
+                        const windowHeight = window.innerHeight;
+                        
+                        if (cardTop < windowHeight * 0.8) {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }
+                    });
+                    
+                    // Animate motivation section
+                    const motivation = document.querySelector('.motivation');
+                    if (motivation) {
+                        const motTop = motivation.getBoundingClientRect().top;
+                        const windowHeight = window.innerHeight;
+                        
+                        if (motTop < windowHeight * 0.7) {
+                            motivation.style.opacity = '1';
+                        }
+                    }
+                    
+                    ticking = false;
+                });
+                
+                ticking = true;
+            }
+        });
+
+        // Enhanced smooth reveal animation on page load
+        window.addEventListener('load', () => {
+            // Fade in hero section
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.opacity = '1';
+            }
+            
+            // Stagger card animations
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(80px) rotateX(-15deg)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 1s cubic-bezier(0.23, 1, 0.32, 1)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0) rotateX(0)';
+                }, 100 + (index * 150));
+            });
+            
+            // Fade in navigation elements
+            setTimeout(() => {
+                const navDots = document.getElementById('navDots');
+                const navArrows = document.querySelector('.nav-arrows');
+                
+                if (navDots) {
+                    navDots.style.opacity = '0';
+                    navDots.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => navDots.style.opacity = '1', 1000);
+                }
+                
+                if (navArrows) {
+                    navArrows.style.opacity = '0';
+                    navArrows.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => navArrows.style.opacity = '1', 1000);
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>
